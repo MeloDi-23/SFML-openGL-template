@@ -1,0 +1,64 @@
+
+---
+
+### 1. **Classic Heart Shape**
+\[
+x(t) = 16 \sin^3(t)
+\]
+\[
+y(t) = 13 \cos(t) - 5 \cos(2t) - 2 \cos(3t) - \cos(4t)
+\]
+- Parameter: \( t \in [0, 2\pi] \)
+
+---
+
+### 2. **Simplified Heart**
+\[
+x(t) = \sin(t)
+\]
+\[
+y(t) = 1 - |\cos(t)|
+\]
+- Parameter: \( t \in [0, 2\pi] \)
+
+---
+
+### 3. **Circular-Inspired Heart**
+\[
+x(t) = \cos(t) \sin(t)
+\]
+\[
+y(t) = \sqrt{|\cos(t)|}
+\]
+- Parameter: \( t \in [0, \pi] \)
+
+---
+
+### 4. **Stylized Heart**
+\[
+x(t) = \sin(t)
+\]
+\[
+y(t) = \sin(t) \sqrt{|\cos(t)|}
+\]
+- Parameter: \( t \in [0, \pi] \)
+
+---
+
+### 5. **Heart Using Polar Coordinates**
+In polar coordinates, we can define the heart shape as:
+\[
+r = 1 - \sin(\theta)
+\]
+Convert to Cartesian:
+\[
+x(\theta) = r \cos(\theta) = (1 - \sin(\theta)) \cos(\theta)
+\]
+\[
+y(\theta) = r \sin(\theta) = (1 - \sin(\theta)) \sin(\theta)
+\]
+- Parameter: \( \theta \in [0, 2\pi] \)
+
+---
+
+Each of these can be plotted to see a heart shape. If you'd like help visualizing them, let me know!

@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "compilerPath": "C:\\mingw32\\bin\\g++.exe",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "D:\\Programming\\SFML-2.6.2\\include",
+                "D:\\Programming\\glm-1.0.1-light",
+                "D:\\Programming\\glew-2.2.0",
+                "D:\\Programming\\assimp\\include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.22000.0",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x86",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
