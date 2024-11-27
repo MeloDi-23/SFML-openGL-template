@@ -8,9 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <transform.hpp>
-#include <glm/gtx/string_cast.hpp>
-#include <camera.hpp>
+#include <glsimple.hpp>
 GLint load_shader();
 void draw_openGL(float);
 GLuint shader_from_file(const char* file, GLuint type);
@@ -22,7 +20,7 @@ extern float ratio;
 float ratio = 0.f;
 int main() {
     // Set up the SFML window with an OpenGL context
-    sf::Window window(sf::VideoMode(800, 600), "OpenGL with SFML", sf::Style::Default, sf::ContextSettings(24));
+    sf::Window window(sf::VideoMode(1000, 800), "OpenGL with SFML", sf::Style::Default, sf::ContextSettings(24));
     window.setVerticalSyncEnabled(true);
     auto size = window.getSize();
     ratio = (float)size.x/size.y;

@@ -4,25 +4,30 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <util.h>
 
 #include <fstream>
 #include <sstream>
 
-#include <transform.hpp>
-#include <glm/gtx/string_cast.hpp>
-#include <camera.hpp>
+#include <vector>
+#include <glsimple.hpp>
+
 extern float ratio;
 
 
 GLint model_matrix_loc, cam_matrix_loc;
 GLuint VBO[2], VIO[2];
+gls::model sword_model, pyramid_model;
 
 glm::f32mat4x4 model_mat(1.0f), view_mat(1.0f), proj_mat(1.0f);
 gls::transform model;
 gls::camera camera;
 
 GLint load_shader();
-void draw_openGL();
+
+std::vector<gls::object> obj_pool;
+
+void draw_openGL(float);
 GLuint shader_from_file(const char* file, GLuint type);
 
 GLint load_shader() {
@@ -81,32 +86,40 @@ GLuint shader_from_file(const char* file, GLuint type) {
 }
 
 void draw_openGL(float t) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUniformMatrix4fv(cam_matrix_loc, 1, GL_FALSE, glm::value_ptr(camera.camera_matrix()));
 
+
+    obj_pool[0].transform.rotate_local(glm::vec3(glm::radians(0.09f*t), 0.f, 0.f));
+    for(const auto& obj: obj_pool) {
+        
+        obj.draw(model_matrix_loc);
+    }
+
     // model.rotate_local(glm::vec3(glm::radians(0.09f*t), 0.f, 0.f));
-    glUniformMatrix4fv(model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model.model_matrix()));
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VIO[0]);
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+    // glUniformMatrix4fv(model_matrix_loc, 1, GL_FALSE, glm::value_ptr(model.model_matrix()));
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glEnableVertexAttribArray(0);
+    // glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VIO[0]);
+    // glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
-    glLineWidth(1.f);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VIO[1]);
-    glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
+    // glLineWidth(1.f);
+    // glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VIO[1]);
+    // glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
 
 
 
-    glLineWidth(4.f);
-    glUniformMatrix4fv(model_matrix_loc, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VIO[1]);
-    glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
-    glDisableVertexAttribArray(0);
+    // glLineWidth(4.f);
+    // glUniformMatrix4fv(model_matrix_loc, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
+    // glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VIO[1]);
+    // glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
+    // glDisableVertexAttribArray(0);
     /**
      * Draw Array from the buffer which VBO points to.
      * glBindBuffer interperete VBO as an array buffer and bring it to table;
@@ -135,7 +148,13 @@ void init_gl() {
 }
 
 void prepare_models() {
-    // hard coded models and buffer creation.
+    sword_model.load("assets/model/Sting-Sword.obj");
+    sword_model.bind_buffer();
+
+    gls::transform trans(glm::vec3(0.f), glm::vec3(0.f), .3f, nullptr);
+    gls::object sword_obj(trans, &sword_model);
+
+
     glm::vec3 vertex[] = {
         {1, 0, 0},
         {0, 0.5, 0},
@@ -143,18 +162,31 @@ void prepare_models() {
         {0, 0, 1}
     };
 
-    glm::vec3 axis[] = {
-        {0, 0, 0},
-        {4, 0, 0},
-        {0, 4, 0},
-        {0, 0, 4}
-    };
-
     unsigned int index[] = {
         0, 2, 1,
         0, 1, 3,
         0, 3, 2,
         1, 2, 3
+    };
+
+    // PRINT_MSG("enter model");
+    // pyramid_model = gls::model((float*)(vertex), 4, index, 12);
+    // PRINT_MSG("construct model");
+    // pyramid_model.bind_buffer();
+    // PRINT_MSG("bind buffer");
+
+
+    // gls::object pyramid_obj;
+    // pyramid_obj.model = &pyramid_model;
+    // pyramid_obj.transform.rotate(glm::vec3(0.f, 0.f, glm::radians(40.f)));
+    // obj_pool.push_back(pyramid_obj);
+    obj_pool.push_back(sword_obj);
+
+    glm::vec3 axis[] = {
+        {0, 0, 0},
+        {4, 0, 0},
+        {0, 4, 0},
+        {0, 0, 4}
     };
 
     unsigned int index_axis[] = {
@@ -180,9 +212,9 @@ void prepare_models() {
 
 void prepare_cams() {
     model.rotate(glm::vec3(0.f, 0.f, glm::radians(40.f)));
-    camera.move_to(glm::vec3(5.f, 5.f, 5.f));
+    camera.move_to(glm::vec3(20.f));
     camera.look_at(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
-    camera.set_perspective(glm::radians(45.f), ratio, 0.2f, 50.f);
+    camera.set_perspective(glm::radians(30.f), ratio, 0.2f, 70.f);
 }
 
 void delete_resources() {

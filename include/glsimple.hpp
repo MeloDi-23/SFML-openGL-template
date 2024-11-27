@@ -1,9 +1,12 @@
 #pragma once
-#include<transform.hpp>
-#include<camera.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 
-#include<model.hpp>
+#include <util.h>
 
+#include <transform.hpp>
+#include <camera.hpp>
+#include <model.hpp>
+#include <object.hpp>
 /**
  * all headers about gls.
  * transform: transforming of models
